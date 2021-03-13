@@ -67,6 +67,11 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-2
+        
+    - name: Check if the instance is running
+      run: 
+        aws ec2 describe-instance-status --instance-ids "i-048f1bab0f15cc001" --query 'InstanceStatuses[0].InstanceState.Name > aws_output.out
+        cat aws_output.out
     
     
     
