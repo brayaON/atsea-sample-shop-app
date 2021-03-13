@@ -26,7 +26,7 @@ jobs:
       
     - name: Push the JavaApp Docker Image
       run: 
-        docker push ${{secrets.DOCKER_USERNAME}}/java_app:latest ${{secrets.DOCKER_USERNAME}}/java_app:${{ github.sha }} 
+        docker push --all-tags ${{secrets.DOCKER_USERNAME}}/java_app
       
     - name: Build the Database Docker Image
       run: 
@@ -34,4 +34,4 @@ jobs:
       
     - name: Push the Database Docker Image
       run: 
-        docker push ${{secrets.DOCKER_USERNAME}}/database:latest ${{secrets.DOCKER_USERNAME}}/database:${{ github.sha }} 
+        docker push --all-tags ${{secrets.DOCKER_USERNAME}}/database
