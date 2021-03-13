@@ -35,3 +35,19 @@ jobs:
     - name: Push the Database Docker Image
       run: 
         docker push --all-tags ${{secrets.DOCKER_USERNAME}}/database
+        
+    - name: Build the PaymentGateway Docker Image
+      run: 
+        docker build payment_gateway/ --tag ${{secrets.DOCKER_USERNAME}}/payment_gateway:latest --tag ${{secrets.DOCKER_USERNAME}}/payment_gateway:${{ github.sha }} 
+      
+    - name: Push the PaymentGateway Docker Image
+      run: 
+        docker push --all-tags ${{secrets.DOCKER_USERNAME}}/payment_gateway
+        
+    - name: Build the ReverseProxy Docker Image
+      run: 
+        docker build reverse_proxy/ --tag ${{secrets.DOCKER_USERNAME}}/reverse_proxy:latest --tag ${{secrets.DOCKER_USERNAME}}/reverse_proxy:${{ github.sha }} 
+      
+    - name: Push the ReverseProxy Docker Image
+      run: 
+        docker push --all-tags ${{secrets.DOCKER_USERNAME}}/reverse_proxy
