@@ -22,10 +22,10 @@ jobs:
       
     - name: Build the JavaApp Docker Image
       run: 
-        docker build /app/Dockerfile --tag ${{secrets.DOCKER_USER}}/java_app:latest --tag ${{secrets.DOCKER_USER}}/java_app:${{ github.sha }} 
+        docker build /app/Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/java_app:latest --tag ${{secrets.DOCKER_USERNAME}}/java_app:${{ github.sha }} 
       
     - name: Push the JavaApp Docker Image
       run: 
-        docker push ${{secrets.DOCKER_USER}}/Java_app:latest
-        docker push ${{secrets.DOCKER_USER}}/Java_app:${{ github.sha }} 
+        docker push ${{secrets.DOCKER_USERNAME}}/Java_app:latest
+        docker push ${{secrets.DOCKER_USERNAME}}/Java_app:${{ github.sha }} 
       
