@@ -69,9 +69,8 @@ jobs:
         aws-region: us-east-2
         
     - name: Check if the instance is running
-      run: 
-        aws ec2 describe-instance-status --instance-ids "i-048f1bab0f15cc001" --query 'InstanceStatuses[0].InstanceState.Name' > aws_output.out && cat aws_output.out
-    
-    
-    
+      run: |
+        aws ec2 describe-instance-status --instance-ids "i-048f1bab0f15cc001" --query 'InstanceStatuses[0].InstanceState.Name' > aws_output.out
+        OUT=`cat aws_output.out | grep -w running | wc -l`;
+        if [ $OUT -eq 0 ]; then aws ec2 start-instances --instance-ids  i-048f1bab0f15cc001; fi
   
