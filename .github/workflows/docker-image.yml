@@ -26,6 +26,14 @@ jobs:
       
     - name: Push the JavaApp Docker Image
       run: 
-        docker push ${{secrets.DOCKER_USERNAME}}/Java_app:latest
-        docker push ${{secrets.DOCKER_USERNAME}}/Java_app:${{ github.sha }} 
+        docker push ${{secrets.DOCKER_USERNAME}}/java_app:latest
+        docker push ${{secrets.DOCKER_USERNAME}}/java_app:${{ github.sha }} 
       
+    - name: Build the Database Docker Image
+      run: 
+        docker build database/ --tag ${{secrets.DOCKER_USERNAME}}/database:latest --tag ${{secrets.DOCKER_USERNAME}}/database:${{ github.sha }} 
+      
+    - name: Push the Database Docker Image
+      run: 
+        docker push ${{secrets.DOCKER_USERNAME}}/database:latest
+        docker push ${{secrets.DOCKER_USERNAME}}/database:${{ github.sha }} 
