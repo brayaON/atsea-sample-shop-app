@@ -20,7 +20,7 @@ services:
       - postgres_password
 
   appserver:
-    image: cloaiza/java_app
+    image: cloaiza/app
     user: gordon
     ports:
       - "8080:8080" 
