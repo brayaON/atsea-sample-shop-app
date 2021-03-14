@@ -59,7 +59,7 @@ jobs:
         OUT=`cat aws_output.out | grep -w running | wc -l`;
         if [ $OUT -eq 0 ]; then aws ec2 start-instances --instance-ids  ${{ secrets.INSTANCE_ID }}; fi
         
-    - name: Executing remote ssh commands using password
+    - name: Executing remote ssh commands using key
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.INSTANCE_PUBLIC_DNS }}
@@ -67,9 +67,10 @@ jobs:
         key: ${{ secrets.INSTANCE_PRIVATE_KEY }}
         timeout: 60s
         script: | 
-          ls -al
-          whoami
-          touch file_ssh.in
+          if ! [[ -d "./devsecrets" ]]; then mkdir devsecrets; fi
+          echo ${{ secrets.POSTGRES_PASSWORD }} > devsecrets/postgres_password
+          echo ${{ secrets.PAYMENT_TOKEN }} > devsecrets/payment_token
+          docker-compose up
         
     - name: Trigger end to end tests
       run: |
