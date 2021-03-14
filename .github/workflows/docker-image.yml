@@ -54,8 +54,13 @@ jobs:
         docker push --all-tags ${{secrets.DOCKER_USERNAME}}/reverse_proxy
   
   deploy:
+  
+    needs: docker_imgs
+    
     name: Upload to AWS EC2
+  
     runs-on: ubuntu-latest
+    
     env:
       AWS_REGION: us-east-2
 
@@ -72,9 +77,12 @@ jobs:
         
     - name: Check if the instance is running
       run: |
-        aws ec2 describe-instance-status --instance-ids "i-048f1bab0f15cc001" --query 'InstanceStatuses[0].InstanceState.Name' > aws_output.out
+        aws ec2 describe-instance-status --instance-ids ${{ secrets.INSTANCE_ID }} --query 'InstanceStatuses[0].InstanceState.Name' > aws_output.out
         OUT=`cat aws_output.out | grep -w running | wc -l`;
-        if [ $OUT -eq 0 ]; then aws ec2 start-instances --instance-ids  i-048f1bab0f15cc001; fi
+        if [ $OUT -eq 0 ]; then aws ec2 start-instances --instance-ids  ${{ secrets.INSTANCE_ID }}; fi
+        
+    - name: Send the docker-compose file to the instance
+      run: scp -i ${{ secrets.INSTANCE_PRIVATE_KEY }} ./docker-compose.yml ec2-user@${{ secrets.INSTANCE_PUBLIC_DNS }}:/home/ec2-user/
         
     - name: Trigger end to end tests
       run: |
