@@ -56,6 +56,8 @@ jobs:
   deploy:
     name: Upload to AWS EC2
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-2
 
     steps:
     - name: Checkout
@@ -66,11 +68,22 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-2
+        aws-region: ${{ env.AWS_REGION }}
         
     - name: Check if the instance is running
       run: |
         aws ec2 describe-instance-status --instance-ids "i-048f1bab0f15cc001" --query 'InstanceStatuses[0].InstanceState.Name' > aws_output.out
         OUT=`cat aws_output.out | grep -w running | wc -l`;
         if [ $OUT -eq 0 ]; then aws ec2 start-instances --instance-ids  i-048f1bab0f15cc001; fi
+        
+    - name: Trigger end to end tests
+      run: |
+        curl --request POST \
+        --url https://api.github.com/repos/brayaon/tests-atsea-app/dispatches \
+        --header 'authorization: Bearer ${{ secrets.ACCESS_TOKEN }}' \
+        --header 'Accept: application/vnd.github.v3+json' \
+        --data '{
+          "event_type": "deployed"
+          }' \
+        --fail
   
