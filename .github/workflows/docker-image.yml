@@ -88,6 +88,7 @@ jobs:
         username: ec2-user
         password: ${{ secrets.INSTANCE_PRIVATE_KEY }}
         script: | 
+          ls -al
           whoami
         
     - name: Trigger end to end tests
