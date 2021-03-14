@@ -33,7 +33,7 @@ jobs:
   
   cd:
   
-    needs: docker_imgs
+    needs: ci
     
     name: Upload to AWS EC2
   
