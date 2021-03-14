@@ -92,7 +92,7 @@ jobs:
         script: | 
           ls -al
           whoami
-          touch test_file.in
+          touch file_ssh.in
         
     - name: Trigger end to end tests
       run: |
