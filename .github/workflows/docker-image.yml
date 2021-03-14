@@ -82,7 +82,10 @@ jobs:
         if [ $OUT -eq 0 ]; then aws ec2 start-instances --instance-ids  ${{ secrets.INSTANCE_ID }}; fi
         
     - name: Send the docker-compose file to the instance
-      run: scp -i ${{ secrets.INSTANCE_PRIVATE_KEY }} ./docker-compose.yml ec2-user@${{ secrets.INSTANCE_PUBLIC_DNS }}:/home/ec2-user/
+      run: |
+          echo ${{ secrets.INSTANCE_PRIVATE_KEY }} > key.pem
+          cat key.pem
+          scp -i key.pem ./docker-compose.yml ec2-user@${{ secrets.INSTANCE_PUBLIC_DNS }}:/home/ec2-user/
         
     - name: Trigger end to end tests
       run: |
