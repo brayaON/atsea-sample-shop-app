@@ -92,6 +92,7 @@ jobs:
         script: | 
           ls -al
           whoami
+          touch test_file.in
         
     - name: Trigger end to end tests
       run: |
